@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>HW_02</artifactId>
+    <artifactId>HW_02_2</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -26,10 +26,10 @@
                         <index>true</index>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.AgentTester</mainClass>
+                            <mainClass>ru.SizeUtilTester</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Premain-Class>ru.JavaAgentClassAndMemoryCount</Premain-Class>
+                            <Premain-Class>ru.SizeUtil</Premain-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>

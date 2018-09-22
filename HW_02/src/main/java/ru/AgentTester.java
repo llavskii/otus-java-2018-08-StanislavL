@@ -8,11 +8,11 @@ import java.util.List;
 
 public class AgentTester {
     static List objectSizeList = new ArrayList<String>();
-//для запуска java -javaagent:HW_02-1.0-SNAPSHOT.jar -jar HW_02-1.0-SNAPSHOT.jar
+
+    //для запуска java -javaagent:HW_02-1.0-SNAPSHOT.jar -jar HW_02-1.0-SNAPSHOT.jar
     public static void main(String[] args) {
         A a = new A();
         B b = new B();
-
         addObjectSizeToList(new Object());
         addObjectSizeToList(a);
         addObjectSizeToList(b);
@@ -29,13 +29,15 @@ public class AgentTester {
 
     }
 
-    public static void addObjectSizeToList(Object obj){
+    public static void addObjectSizeToList(Object obj) {
         objectSizeList.add(String.format("Object type: %s, size=%s", obj.getClass(), JavaAgentClassAndMemoryCount.getSize(obj)));
     }
 }
-class A{
+
+class A {
 };
-class B{
+
+class B {
     int a;
     int b;
 };
