@@ -16,6 +16,10 @@
     </properties>
     <modules>
         <module>HW_01</module>
+        <module>HW_02</module>
+        <module>HW_02_2</module>
+        <module>HW_03</module>
+        <module>HW_04</module>
     </modules>
 
 
