@@ -2,17 +2,12 @@ package memoryLeaksTest.benchMark;
 
 import memoryLeaks.*;
 
-public class Benchmark implements BenchmarkMBean {
+import java.util.Timer;
 
-    private volatile int size = 0;
+public class Benchmark implements BenchmarkMBean {
 
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
-
-        System.out.println("Starting the loop");
-        StatsGCperMinute statsGCperMinute = new StatsGCperMinute();
-        statsGCperMinute.start();
-
         ObjectInsideMethod objectInsideMethod = new ObjectInsideMethod("");
         ReassigningReferenceVariable reassigningReferenceVariable = new ReassigningReferenceVariable("");
         NullifyingReferenceVariable nullifyingReferenceVariable = new NullifyingReferenceVariable("");
@@ -24,25 +19,9 @@ public class Benchmark implements BenchmarkMBean {
         anonymousObject.start();
         addMoreThanRemoveList.start();
 
-        while (true) {
-            int local = size;
-            Object[] array = new Object[local];
-//            System.out.println("Benchmark: array of size: " + array.length + " created");
-
-            for (int i = 0; i < local; i++) {
-                array[i] = new String(new char[0]);
-            }
-//            System.out.println("Benchmark: created " + local + " objects.");
-            GCmetrics.printGCMetrics();
-
-        }
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
+        System.out.println("Starting benchmark...");
+        Timer timer = new Timer();
+        StatsGCperMinute statsGCperMinute = new StatsGCperMinute();
+        timer.schedule(statsGCperMinute, 60_000, 60_000);
     }
 }

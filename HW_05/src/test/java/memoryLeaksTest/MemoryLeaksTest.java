@@ -11,8 +11,7 @@ public class MemoryLeaksTest {
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
         MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         Benchmark mbean = new Benchmark();
-        mBeanServer.registerMBean(mbean, new ObjectName("ru.benchmark:type=Benchmark, target=Memoryleaks"));
-        mbean.setSize(5000000);
+        mBeanServer.registerMBean(mbean, new ObjectName("ru.benchmark:type=BenchmarkMemory"));
         mbean.run();
     }
 }

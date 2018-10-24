@@ -1,50 +1,86 @@
 package memoryLeaksTest.benchMark;
 
-import static memoryLeaksTest.benchMark.GCmetrics.*;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TimerTask;
 
-public class StatsGCperMinute extends Thread {
+public class StatsGCperMinute extends TimerTask {
+    private final Set<String> YOUNG_GARBAGE_COLLECTORS = new HashSet<>(3);
+    private final Set<String> OLD_GARBAGE_COLLECTORS = new HashSet<>(3);
+    private Set<String> UNKNOWN_GARBAGE_COLLECTOR = new HashSet<>();
+
+    private static long minorCountBefore;
+    private static long minorTimeBefore;
+    private static long majorCountBefore;
+    private static long majorTimeBefore;
+    private static long unknownCountBefore;
+    private static long unknownTimeBefore;
+    private static int minuteCount;
+
+    {
+        // young generation GCmetrics names
+        YOUNG_GARBAGE_COLLECTORS.add("PS Scavenge");
+        YOUNG_GARBAGE_COLLECTORS.add("ParNew");
+        YOUNG_GARBAGE_COLLECTORS.add("G1 Young Generation");
+
+        // old generation GCmetrics names
+        OLD_GARBAGE_COLLECTORS.add("PS MarkSweep");
+        OLD_GARBAGE_COLLECTORS.add("ConcurrentMarkSweep");
+        OLD_GARBAGE_COLLECTORS.add("G1 Old Generation");
+    }
 
     @Override
     public void run() {
-        int minuteCount = 0;
-        try {
-            while (true) {
-                long minorCountBefore = minorCount;
-                long minorTimeBefore = minorTime;
-                long majorCountBefore = majorCount;
-                long majorTimeBefore = majorTime;
-                long unknownCountBefore = unknownCount;
-                long unknownTimeBefore = unknownTime;
 
-                Thread.sleep(60 * 1000);
-                long minorCountPerMinute = minorCount - minorCountBefore;
-                long minorTimePerMinute = minorTime - minorTimeBefore;
-                long majorCountPerMinute = majorCount - majorCountBefore;
-                long majorTimePerMinute = majorTime - majorTimeBefore;
-                long unknownCountPerMinute = unknownCount - unknownCountBefore;
-                long unknownTimePerMinute = unknownTime - unknownTimeBefore;
+        long minorCount = 0;
+        long minorTime = 0;
+        long majorCount = 0;
+        long majorTime = 0;
+        long unknownCount = 0;
+        long unknownTime = 0;
 
-                minuteCount++;
-                StringBuilder sb = new StringBuilder();
-                        sb.append("_*** Stats per ")
-                        .append(minuteCount)
-                        .append(" minute: ***_ \n_*** MinorGC -> Count: ")
-                        .append(minorCountPerMinute)
-                        .append(", Time (s): ").append(minorTimePerMinute/1000)
-                        .append(", MajorGC -> Count: ").append(majorCountPerMinute)
-                        .append(", Time (s): ").append(majorTimePerMinute/1000);
-
-                if (unknownCount > 0) {
-                    sb.append(", UnknownGC: ")
-                            .append(UNKNOWN_GARBAGE_COLLECTOR.toString())
-                            .append(" -> Count: ").append(unknownCountPerMinute)
-                            .append(", Time (s): ").append(unknownTimePerMinute/1000);
-                }
-                System.out.println(sb);
+        List<GarbageCollectorMXBean> mxBeans
+                = ManagementFactory.getGarbageCollectorMXBeans();
+        for (GarbageCollectorMXBean gc : mxBeans) {
+            long count = gc.getCollectionCount();
+            if (YOUNG_GARBAGE_COLLECTORS.contains(gc.getName())) {
+                minorCount = count - minorCountBefore;
+                minorTime = gc.getCollectionTime() - minorTimeBefore;
+            } else if (OLD_GARBAGE_COLLECTORS.contains(gc.getName())) {
+                majorCount = count - majorCountBefore;
+                majorTime = gc.getCollectionTime() - majorTimeBefore;
+            } else {
+                unknownCount = count - unknownCountBefore;
+                unknownTime = gc.getCollectionTime() - unknownTimeBefore;
+                UNKNOWN_GARBAGE_COLLECTOR.add(gc.getName());
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+        minuteCount++;
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("Stats per ")
+                .append(minuteCount)
+                .append(" minute: MinorGC -> Count: ")
+                .append(minorCount)
+                .append(", Time (ms): ").append(minorTime)
+                .append(", MajorGC -> Count: ").append(majorCount)
+                .append(", Time (ms): ").append(majorTime);
+
+        if (unknownCount > 0) {
+            sb.append(", UnknownGC: ")
+                    .append(UNKNOWN_GARBAGE_COLLECTOR.toString())
+                    .append(" -> Count: ").append(unknownCount)
+                    .append(", Time (ms): ").append(unknownTime);
+        }
+        System.out.println(sb);
+        minorCountBefore = minorCount;
+        minorTimeBefore = minorTime;
+        majorCountBefore = majorCount;
+        majorTimeBefore = majorTime;
+        unknownCountBefore = unknownCount;
+        unknownTimeBefore = unknownTime;
     }
 }

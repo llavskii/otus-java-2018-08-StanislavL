@@ -10,14 +10,19 @@ public class AddMoreThanRemoveList extends MemoryLeaks {
 
     @Override
     public void run() {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>(70000);
 
         while (true) {
-            for (int i = 0; i < 900000; i++) {
-                list.add("abcdef");
+            for (int i = 0; i < 60000; i++) {
+                list.add("abc");
             }
-            for (int i = 0; i < 10000; ) {
-                list.remove(0);
+            for (int i = 0; i < 9000; i++) {
+                list.remove(list.size() - 1);
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
