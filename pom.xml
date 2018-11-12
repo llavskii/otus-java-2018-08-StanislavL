@@ -11,8 +11,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.10</maven.compiler.source>
-        <maven.compiler.target>1.10</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <modules>
         <module>HW_01</module>
@@ -21,6 +21,7 @@
         <module>HW_03</module>
         <module>HW_04</module>
         <module>HW_05</module>
+        <module>HW_06</module>
     </modules>
 
 
