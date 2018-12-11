@@ -14,12 +14,11 @@ import java.util.Random;
  */
 
 public class BankClientGenerator {
-    private static JSONArray names;
-    private static JSONArray lastNames;
-    private static Random random = new Random();
+    private JSONArray names;
+    private JSONArray lastNames;
+    private Random random = new Random();
 
-
-    {
+    public BankClientGenerator() {
         String resourcesPath = "HW_07\\src\\main\\resources";
         String jsonFileName = "names.json";
         File file = new File(resourcesPath + File.separator + jsonFileName);
@@ -33,13 +32,12 @@ public class BankClientGenerator {
 
         names = jsonObject.getJSONArray("names");
         lastNames = jsonObject.getJSONArray("last names");
+
     }
 
-    public static Client getGeneratedClient() {
+    public Client getGeneratedClient() {
         Client client = new Client(names.getString(random.nextInt(names.length())),
                 lastNames.getString(random.nextInt(lastNames.length())));
         return client;
     }
-
-
 }

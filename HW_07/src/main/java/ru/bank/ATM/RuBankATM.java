@@ -90,4 +90,8 @@ public class RuBankATM implements Runnable {
             }
         }
     }
+
+    public BankClientGenerator getClientGenerator() {
+        return clientGenerator;
+    }
 }

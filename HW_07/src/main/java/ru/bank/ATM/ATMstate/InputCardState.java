@@ -3,7 +3,6 @@ package ru.bank.ATM.ATMstate;
 import ru.bank.ATM.ATMcontext.ATMcontext;
 import ru.bank.ATM.MenuMessages;
 import ru.bank.bankCard.BankCard;
-import ru.bank.clients.BankClientGenerator;
 import ru.bank.clients.BankDataBase;
 import ru.bank.clients.Client;
 
@@ -28,7 +27,7 @@ public class InputCardState extends ATMstate {
             } else {
                 //Если клиент не найден, то генерим для него тестового клиента
                 System.out.println("[ Сгенерирован тестовый клиент! ]");
-                context.setCurrentClient(BankClientGenerator.getGeneratedClient());
+                context.setCurrentClient(context.getATM().getClientGenerator().getGeneratedClient());
 
                 //Устанавлиаем переменную isNewClient, если этого сгененированного
                 // клиента не было /или был в БД (у нас есть клиенты с несколькими картами!)
