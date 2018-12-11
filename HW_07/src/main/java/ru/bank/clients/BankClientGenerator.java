@@ -14,8 +14,8 @@ import java.util.Random;
  */
 
 public class BankClientGenerator {
-    private JSONArray names;
-    private JSONArray lastNames;
+    private static JSONArray names;
+    private static JSONArray lastNames;
     private static Random random = new Random();
 
 
@@ -35,7 +35,7 @@ public class BankClientGenerator {
         lastNames = jsonObject.getJSONArray("last names");
     }
 
-    public Client getGeneratedClient() {
+    public static Client getGeneratedClient() {
         Client client = new Client(names.getString(random.nextInt(names.length())),
                 lastNames.getString(random.nextInt(lastNames.length())));
         return client;

@@ -22,8 +22,12 @@ public class BankCard {
         return number;
     }
 
-    public String getBalance() {
-        return String.valueOf(balance);
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     public String getPIN() {
