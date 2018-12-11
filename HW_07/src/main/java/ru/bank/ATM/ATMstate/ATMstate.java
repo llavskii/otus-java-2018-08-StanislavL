@@ -13,7 +13,7 @@ public abstract class ATMstate {
         ExecutorService executor = Executors.newFixedThreadPool(1);
         Callable<String> callable = new ConsoleInputReadTask();
         Future<String> future = executor.submit(callable);
-        while (this.getClass() != InputPinCodeState.class || System.currentTimeMillis() - start < 4_000) {
+        while (this.getClass() != InputPinCodeState.class || System.currentTimeMillis() - start < 8_000) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
