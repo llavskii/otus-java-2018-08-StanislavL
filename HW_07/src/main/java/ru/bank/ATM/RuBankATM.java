@@ -1,7 +1,7 @@
 package ru.bank.ATM;
 
-import ru.bank.ATM.ATMcontext.ATMcontext;
-import ru.bank.ATM.ATMstate.InputCardState;
+import ru.bank.ATM.AtmContext.ATMcontext;
+import ru.bank.ATM.AtmState.InputCardState;
 import ru.bank.ATM.banknotes.Rubles;
 import ru.bank.clients.BankClientGenerator;
 

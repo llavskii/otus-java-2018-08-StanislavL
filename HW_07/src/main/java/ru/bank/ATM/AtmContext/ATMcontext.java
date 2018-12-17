@@ -1,6 +1,6 @@
-package ru.bank.ATM.ATMcontext;
+package ru.bank.ATM.AtmContext;
 
-import ru.bank.ATM.ATMstate.ATMstate;
+import ru.bank.ATM.AtmState.ATMstate;
 import ru.bank.ATM.RuBankATM;
 import ru.bank.clients.Client;
 

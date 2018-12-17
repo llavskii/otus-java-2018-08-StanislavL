@@ -1,6 +1,6 @@
-package ru.bank.ATM.ATMstate;
+package ru.bank.ATM.AtmState;
 
-import ru.bank.ATM.ATMcontext.ATMcontext;
+import ru.bank.ATM.AtmContext.ATMcontext;
 import ru.bank.ATM.MenuMessages;
 
 public class ReturnCardState extends ATMstate {
