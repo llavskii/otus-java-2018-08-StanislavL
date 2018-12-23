@@ -1,5 +1,6 @@
 package ru.bank.AtmObserver;
 
+import ru.bank.ATM.AtmState.AtmState;
 import ru.bank.ATM.RuBankAtm;
 
 public class AtmObserver {
@@ -9,12 +10,20 @@ public class AtmObserver {
         this.bankAtm = ruBankAtm;
     }
 
-    public void update(RuBankAtm activeAtm) {
-        bankAtm.updateStatus(activeAtm);
+    public void update(AtmObserver observerOfActiveAtm) {
+        bankAtm.updateStatus(observerOfActiveAtm);
     }
 
-    public RuBankAtm getBankAtm() {
-        return bankAtm;
+    public void restore() {
+        bankAtm.restore();
+    }
+
+    public int getAvailableSumm() {
+        return bankAtm.getAvailableSumm();
+    }
+
+    public AtmState getAtmState() {
+        return bankAtm.getContext().getState();
     }
 
 }

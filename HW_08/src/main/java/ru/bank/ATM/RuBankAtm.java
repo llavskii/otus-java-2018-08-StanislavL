@@ -4,15 +4,18 @@ import ru.bank.ATM.AtmContext.AtmContext;
 import ru.bank.ATM.AtmState.InputCardState;
 import ru.bank.ATM.AtmState.WaitingActiveStatusState;
 import ru.bank.ATM.banknotes.Rubles;
+import ru.bank.AtmObserver.AtmObserver;
 import ru.bank.clients.BankClientGenerator;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RuBankAtm implements Runnable {
+    private AtmObserver observer;
     private int initializeCapacity;
     private String AtmName;
     private BankClientGenerator clientGenerator = new BankClientGenerator();
-    private final Map<Rubles, Integer> ATMrubleBoxes = new HashMap<>();
+    private final Map<Rubles, Integer> ATMrubleBoxes = new ConcurrentHashMap<>();
 
     private static Comparator<Integer> banknotesDescComparator = (o1, o2) -> o2.compareTo(o1);
     private AtmContext context = new AtmContext(new WaitingActiveStatusState());
@@ -20,11 +23,13 @@ public class RuBankAtm implements Runnable {
 
     //Конструктор банкомата с параметром int имитирует загрузку одинаковым количеством банкнот в каждую ячейку
     public RuBankAtm(String AtmName, int boxCapacity) {
+        observer = new AtmObserver(this);
         //Сохраняем первоначальное значение в переменную initializeCapacity
         initializeCapacity = boxCapacity;
         this.AtmName = AtmName;
         arrangeBanknoteBoxes(boxCapacity);
     }
+
 
     private void arrangeBanknoteBoxes(int boxCapacity) {
         Rubles[] rubles = Rubles.values();
@@ -104,9 +109,9 @@ public class RuBankAtm implements Runnable {
         return clientGenerator;
     }
 
-    public void updateStatus(RuBankAtm activeAtm) {
-        if (AtmName.equals(activeAtm.getAtmName())) {
-            //Если имя банкомата - текущий банкомат, то его статус становится активным
+    public void updateStatus(AtmObserver observerOfActiveAtm) {
+        if (observer == observerOfActiveAtm) {
+            //Если наблюдатель - для текущего банкомата, то его статус становится активным
             context.setState(new InputCardState());
         } else {
             //Если это не активный банкомат, то он будет переведен в состояние ожидания с выводом в консоль сообщения об этом
@@ -129,5 +134,9 @@ public class RuBankAtm implements Runnable {
     //Восстановление емкости ячеек в банкомате до первоначального
     public void restore() {
         arrangeBanknoteBoxes(initializeCapacity);
+    }
+
+    public AtmObserver getObserver() {
+        return observer;
     }
 }
