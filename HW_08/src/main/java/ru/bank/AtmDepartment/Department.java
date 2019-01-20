@@ -19,6 +19,4 @@ public interface Department {
     //Геттер для получения суммы наличности в всем департаменте
     int getSummaryAtmDeposit();
 
-    //Восстановление состояния до первоначального
-    void restore();
 }

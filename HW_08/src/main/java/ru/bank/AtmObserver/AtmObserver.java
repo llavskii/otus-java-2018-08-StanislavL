@@ -2,12 +2,18 @@ package ru.bank.AtmObserver;
 
 import ru.bank.ATM.AtmState.AtmState;
 import ru.bank.ATM.RuBankAtm;
+import ru.bank.ATM.command.RestoreCommand;
 
 public class AtmObserver {
     private RuBankAtm bankAtm;
+    private RestoreCommand restoreCommand;
 
-    public AtmObserver(RuBankAtm ruBankAtm) {
-        this.bankAtm = ruBankAtm;
+    public AtmObserver(RuBankAtm bankAtm) {
+        this.bankAtm = bankAtm;
+    }
+
+    public void setRestoreCommand(RestoreCommand restoreCommand) {
+        this.restoreCommand = restoreCommand;
     }
 
     public void update(AtmObserver observerOfActiveAtm) {
@@ -15,7 +21,7 @@ public class AtmObserver {
     }
 
     public void restore() {
-        bankAtm.restore();
+        restoreCommand.execute();
     }
 
     public int getAvailableSumm() {
