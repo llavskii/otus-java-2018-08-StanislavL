@@ -2,7 +2,7 @@ package ru.bank.AtmDepartment;
 
 import ru.bank.ATM.AtmState.WaitingActiveStatusState;
 import ru.bank.ATM.RuBankAtm;
-import ru.bank.ATM.command.RestoreCommand;
+import ru.bank.ATM.command.RestoreAtmCommand;
 import ru.bank.AtmObserver.AtmObserver;
 
 import java.util.ArrayList;
@@ -17,9 +17,6 @@ public class DepartmentLauncher {
         bankAtms.add(new RuBankAtm("1 Red square", capacity));
         bankAtms.add(new RuBankAtm("2 Hermitage", capacity));
         bankAtms.add(new RuBankAtm("3 Baikal", capacity));
-
-        //Добавление Команды для поля Observer
-        bankAtms.forEach((ATM) -> ATM.getObserver().setRestoreCommand(new RestoreCommand(ATM)));
 
         //Запуск потоков банкоматов
         bankAtms.forEach((ATM) -> new Thread(ATM).start());
@@ -47,8 +44,8 @@ public class DepartmentLauncher {
             }
         }
 
-        //Восстанавление состояние всех банкоматов до начального через метод restore для наблюдателей, которые передают команду банкоматам
-        observers.forEach(AtmObserver::restore);
+        //Восстанавление состояние всех банкоматов до начального через метод sendCommand для наблюдателей, которые передают команду банкоматам
+        observers.forEach(observer -> observer.sendCommand(new RestoreAtmCommand()));
 
         System.exit(0);
     }
