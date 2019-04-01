@@ -36,7 +36,7 @@ public class MainWrite {
 
         System.out.println("Employee JSON String\n" + empJsonObject);
 
-        //write to file
+        //writeGson to file
         OutputStream os = new FileOutputStream("source-javax-json-output.json");
         JsonWriter jsonWriter = Json.createWriter(os);
         jsonWriter.writeObject(empJsonObject);
