@@ -1,0 +1,50 @@
+{
+
+  "year": 1900,
+  "surname": "Ivanov",
+  "name": "Ivan",
+  "isMan": true,
+  "age": 33,
+  "parent": {
+    "parent": {
+      "year": 1985,
+      "surname": "personParentParent surname",
+      "name": "personParentParent name",
+      "isMan": true,
+      "age": 33
+    },
+    "year": 1985,
+    "surname": "personParent surname",
+    "name": "personParent name",
+    "isMan": true,
+    "age": 33,
+    "child": {
+      "year": 1980,
+      "surname": "personChildChild surname",
+      "name": "personChildChild Name",
+      "isMan": true,
+      "age": 33
+    }
+  },
+  "child": {
+    "parent": {
+      "year": 1985,
+      "surname": "personParentParent surname",
+      "name": "personParentParent name",
+      "isMan": true,
+      "age": 33
+    },
+    "year": 1980,
+    "surname": "personChild surname",
+    "name": "personChild name",
+    "isMan": true,
+    "age": 33,
+    "child": {
+      "year": 1980,
+      "surname": "personChildChild surname",
+      "name": "personChildChild Name",
+      "isMan": true,
+      "age": 33
+    }
+  }
+}

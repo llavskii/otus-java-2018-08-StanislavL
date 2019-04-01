@@ -1,0 +1,149 @@
+[
+  {
+    "name": "Ivan",
+    "surname": "Ivanov",
+    "isMan": true,
+    "age": 33,
+    "year": 1900,
+    "parent": {
+      "name": "personParent name",
+      "surname": "personParent surname",
+      "isMan": true,
+      "age": 33,
+      "year": 1985,
+      "parent": {
+        "name": "personParentParent name",
+        "surname": "personParentParent surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1985
+      },
+      "child": {
+        "name": "personChildChild Name",
+        "surname": "personChildChild surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1980
+      }
+    },
+    "child": {
+      "name": "personChild name",
+      "surname": "personChild surname",
+      "isMan": true,
+      "age": 33,
+      "year": 1980,
+      "parent": {
+        "name": "personParentParent name",
+        "surname": "personParentParent surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1985
+      },
+      "child": {
+        "name": "personChildChild Name",
+        "surname": "personChildChild surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1980
+      }
+    }
+  },
+  {
+    "name": "Ivan",
+    "surname": "Ivanov",
+    "isMan": true,
+    "age": 33,
+    "year": 1900,
+    "parent": {
+      "name": "personParent name",
+      "surname": "personParent surname",
+      "isMan": true,
+      "age": 33,
+      "year": 1985,
+      "parent": {
+        "name": "personParentParent name",
+        "surname": "personParentParent surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1985
+      },
+      "child": {
+        "name": "personChildChild Name",
+        "surname": "personChildChild surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1980
+      }
+    },
+    "child": {
+      "name": "personChild name",
+      "surname": "personChild surname",
+      "isMan": true,
+      "age": 33,
+      "year": 1980,
+      "parent": {
+        "name": "personParentParent name",
+        "surname": "personParentParent surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1985
+      },
+      "child": {
+        "name": "personChildChild Name",
+        "surname": "personChildChild surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1980
+      }
+    }
+  },
+  {
+    "name": "Ivan",
+    "surname": "Ivanov",
+    "isMan": true,
+    "age": 33,
+    "year": 1900,
+    "parent": {
+      "name": "personParent name",
+      "surname": "personParent surname",
+      "isMan": true,
+      "age": 33,
+      "year": 1985,
+      "parent": {
+        "name": "personParentParent name",
+        "surname": "personParentParent surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1985
+      },
+      "child": {
+        "name": "personChildChild Name",
+        "surname": "personChildChild surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1980
+      }
+    },
+    "child": {
+      "name": "personChild name",
+      "surname": "personChild surname",
+      "isMan": true,
+      "age": 33,
+      "year": 1980,
+      "parent": {
+        "name": "personParentParent name",
+        "surname": "personParentParent surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1985
+      },
+      "child": {
+        "name": "personChildChild Name",
+        "surname": "personChildChild surname",
+        "isMan": true,
+        "age": 33,
+        "year": 1980
+      }
+    }
+  }
+]

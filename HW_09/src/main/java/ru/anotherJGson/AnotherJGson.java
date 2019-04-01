@@ -7,8 +7,8 @@ import java.util.*;
 
 public class AnotherJGson {
 
-    private static final Set<Class> STRING_TYPES = getStringWrapperTypes();
-    private static final Set<Class> NOT_STRING_TYPES = getNumericAndBooleanWrapperTypes();
+    private static final Set<Class> STRING_COMMON_TYPES = getStringWrapperTypes();
+    private static final Set<Class> NOT_STRING_COMMON_TYPES = getNumericAndBooleanWrapperTypes();
 
     public String toJson(Object obj) {
         if (obj == null) return "null";
@@ -18,20 +18,20 @@ public class AnotherJGson {
     private String toJson(Object obj, Class clazz) {
 
         if (isStringType(clazz)) return "\"" + obj.toString() + "\"";
-        if (isNotStringType(clazz)) return obj.toString();
+        if (isCommonNotStringType(clazz)) return obj.toString();
 
-        return generateJson(obj, clazz);
+        return getJsonObject(obj, clazz).toJSONString();
     }
 
-    private static boolean isNotStringType(Class clazz) {
-        return NOT_STRING_TYPES.contains(clazz);
+    private static boolean isCommonNotStringType(Class clazz) {
+        return NOT_STRING_COMMON_TYPES.contains(clazz);
     }
 
     private static boolean isStringType(Class clazz) {
-        return STRING_TYPES.contains(clazz);
+        return STRING_COMMON_TYPES.contains(clazz);
     }
 
-    private static String generateJson(Object obj, Class clazz) {
+    private static JSONObject getJsonObject(Object obj, Class clazz) {
         JSONObject jsonObject = new JSONObject();
         List<Field> fields = getAllFields(clazz);
         fields.forEach(field -> {
@@ -41,14 +41,18 @@ public class AnotherJGson {
             try {
                 fieldValue = field.get(obj);
                 if (fieldValue == null) return;
-                else if (isNotStringType(fieldClass) | isStringType(fieldClass))
+                else if (isCommonNotStringType(fieldClass) | isStringType(fieldClass))
                     jsonObject.put(field.getName(), fieldValue);
+                else {
+                    JSONObject jsonObject1 = getJsonObject(fieldValue, fieldClass);
+                    jsonObject.put(field.getName(), jsonObject1);
+                }
 
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
-        return jsonObject.toJSONString();
+        return jsonObject;
     }
 
     private static Set<Class> getNumericAndBooleanWrapperTypes() {
@@ -75,6 +79,7 @@ public class AnotherJGson {
     private static Set<Class> getStringWrapperTypes() {
         Set<Class> ret = new HashSet<>();
         ret.add(Character.class);
+        ret.add(char.class);
         ret.add(String.class);
         return ret;
     }
