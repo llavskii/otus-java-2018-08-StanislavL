@@ -4,27 +4,22 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AnotherJGsonTest {
-//    ClassLoader classLoader = AnotherJGsonTest.class.getClassLoader();
-//    File file = new File(classLoader.getResource(FILE_PATH_JSON).getFile());
-
-    static final String FILE_PATH_JSON = AnotherJGsonTest.class.getClassLoader().getResource("person.json").getFile();
+    static final String FILE_PATH_JSON = "src\\test\\resources\\person.json";
     static final Gson GSON = new Gson();
 
     @Test
     public void singleValuesShouldBeAsFromGsonParsed() {
-        System.out.println(AnotherJGsonTest.class.getClassLoader().getResource("person.json").getFile());
-
         assertAll("Single values should be equals string from GSON",
                 () -> assertEquals(GSON.toJson(5), AnotherJGson.toJson(5)),
                 () -> assertEquals(GSON.toJson(new Integer(5)), AnotherJGson.toJson(5)),
@@ -36,7 +31,6 @@ public class AnotherJGsonTest {
 
     @Test
     public void personFromFileByGSONShouldBeEqualAfterAnotherJGson() {
-
         Person person = getPerson();
         writeJsonByAnotherJGsonToFile();
         assertEquals(person, getPersonFromFileByGson());
@@ -71,13 +65,11 @@ public class AnotherJGsonTest {
 
 
     private static Person getPersonFromFileByGson() {
-
-
         Gson gson = new Gson();
         JsonReader reader = null;
         try {
             reader = new JsonReader(new FileReader(FILE_PATH_JSON));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return gson.fromJson(reader, Person.class);
