@@ -6,12 +6,12 @@ import org.json.simple.JSONValue;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static ru.anotherJGson.DataTypesHelper.*;
 
 public class AnotherJGson {
 
-    //Constants for divide saving variables with or not quotes
-    private static final Set<Class> STRING_COMMON_TYPES = getStringWrapperTypes();
-    private static final Set<Class> NOT_STRING_COMMON_TYPES = getNumericAndBooleanWrapperTypes();
 
     public static String toJson(Object obj) {
         //Check for null object
@@ -20,18 +20,15 @@ public class AnotherJGson {
     }
 
     private static String toJson(Object obj, Class clazz) {
-        //Check for single value object
+        //Check for single value of  String or primitives
         if (isStringType(clazz) | isCommonNotStringType(clazz)) return JSONValue.toJSONString(obj);
-
+        //Check for array as single value
+        if (clazz.isArray()) return getJsonArray(obj).toJSONString();
+        //Check for collection
+        if (obj instanceof Collection) return getJsonList(obj).toJSONString();
+        //Check for collection
+        if (obj instanceof Map) return getJsonMap(obj).toJSONString();
         return getJsonObject(obj, clazz).toJSONString();
-    }
-
-    private static boolean isCommonNotStringType(Class clazz) {
-        return NOT_STRING_COMMON_TYPES.contains(clazz);
-    }
-
-    private static boolean isStringType(Class clazz) {
-        return STRING_COMMON_TYPES.contains(clazz);
     }
 
     //Method with recursive call to get Json object
@@ -40,6 +37,8 @@ public class AnotherJGson {
         List<Field> fields = getAllFields(clazz);
         fields.forEach(field -> {
             Class fieldClass = field.getType();
+            //Check to constant
+            if (isPublicStaticFinal(field)) return;
             if (!field.isAccessible()) field.setAccessible(true);
             Object fieldValue = null;
             try {
@@ -48,22 +47,11 @@ public class AnotherJGson {
                 else if (isCommonNotStringType(fieldClass) | isStringType(fieldClass))
                     jsonObject.put(field.getName(), fieldValue);
                 else if (fieldClass.isArray()) {
-                    JSONArray list = new JSONArray();
-                    Object[] arr = (Object[]) fieldValue;
-                    for (Object objArr : arr) {
-                        list.add(objArr);
-                    }
-                    jsonObject.put(field.getName(), list);
+                    jsonObject.put(field.getName(), getJsonArray(fieldValue));
                 } else if (fieldValue instanceof Collection) {
-                    JSONArray list = new JSONArray();
-                    list.addAll((List) fieldValue);
-                    jsonObject.put(field.getName(), list);
-
+                    jsonObject.put(field.getName(), getJsonList(fieldValue));
                 } else if (fieldValue instanceof Map) {
-                    JSONObject jsonObject1 = new JSONObject();
-                    jsonObject1.putAll((Map) fieldValue);
-                    jsonObject.put(field.getName(), jsonObject1);
-
+                    jsonObject.put(field.getName(), getJsonMap(fieldValue));
                 } else {
                     //Recursive call to get Json object
                     JSONObject jsonObject1 = getJsonObject(fieldValue, fieldClass);
@@ -77,33 +65,35 @@ public class AnotherJGson {
         return jsonObject;
     }
 
-    private static Set<Class> getNumericAndBooleanWrapperTypes() {
-        Set<Class> ret = new HashSet<>();
-        ret.add(Boolean.class);
-        ret.add(boolean.class);
-        ret.add(Byte.class);
-        ret.add(byte.class);
-        ret.add(Short.class);
-        ret.add(short.class);
-        ret.add(Integer.class);
-        ret.add(int.class);
-        ret.add(Long.class);
-        ret.add(long.class);
-        ret.add(Float.class);
-        ret.add(float.class);
-        ret.add(Double.class);
-        ret.add(double.class);
-        ret.add(Void.class);
-        ret.add(void.class);
-        return ret;
+    private static JSONObject getJsonMap(Object obj) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putAll((Map) obj);
+        return jsonObject;
     }
 
-    private static Set<Class> getStringWrapperTypes() {
-        Set<Class> ret = new HashSet<>();
-        ret.add(Character.class);
-        ret.add(char.class);
-        ret.add(String.class);
-        return ret;
+    private static JSONArray getJsonList(Object obj) {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.addAll((Collection) obj);
+        return jsonArray;
+    }
+
+    private static JSONArray getJsonArray(Object obj) {
+        String primType = obj.getClass().getName();
+        JSONArray jsonArray = new JSONArray();
+        switch (primType) {
+            case "[I":
+            case "[S":
+            case "[B":
+                jsonArray.addAll(Arrays.stream((int[]) obj).boxed().collect(Collectors.toList()));
+                break;
+            case "[D":
+                jsonArray.addAll(Arrays.stream((double[]) obj).boxed().collect(Collectors.toList()));
+                break;
+            case "[Ljava.lang.String;":
+                jsonArray.addAll(Arrays.stream((String[]) obj).collect(Collectors.toList()));
+                break;
+        }
+        return jsonArray;
     }
 
     //Recursive call to get all fields of object

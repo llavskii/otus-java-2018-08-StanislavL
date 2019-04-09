@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Person {
     private String name;
+    public static final String constant = "constant";
     private String surname;
     private boolean isMan;
     private int age;
