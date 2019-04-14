@@ -1,13 +1,9 @@
 package ru.anotherJGson;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,8 +25,8 @@ public class AnotherJGsonTest {
     @Test
     public void personFromFileByGSONShouldBeEqualAfterAnotherJGson() {
         Person person = TestHelper.getPerson();
-        TestHelper.writeJsonByAnotherJGsonToFile();
-        assertEquals(person, TestHelper.getPersonFromFileByGson());
+        String json = AnotherJGson.toJson(person);
+        assertEquals(person, new Gson().fromJson(json, Person.class));
     }
 
     @Test

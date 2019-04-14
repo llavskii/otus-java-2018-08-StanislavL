@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,18 +79,22 @@ public class AnotherJGson {
     }
 
     private static JSONArray getJsonArray(Object obj) {
-        String primType = obj.getClass().getName();
+        String primType = Array.get(obj, 0).getClass().getSimpleName();
         JSONArray jsonArray = new JSONArray();
         switch (primType) {
-            case "[I":
-            case "[S":
-            case "[B":
+            case "int":
+            case "Integer":
+            case "short":
+            case "Short":
+            case "byte":
+            case "Byte":
                 jsonArray.addAll(Arrays.stream((int[]) obj).boxed().collect(Collectors.toList()));
                 break;
-            case "[D":
+            case "double":
+            case "Double":
                 jsonArray.addAll(Arrays.stream((double[]) obj).boxed().collect(Collectors.toList()));
                 break;
-            case "[Ljava.lang.String;":
+            case "String":
                 jsonArray.addAll(Arrays.stream((String[]) obj).collect(Collectors.toList()));
                 break;
         }

@@ -1,22 +1,11 @@
 package ru.anotherJGson;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TestHelper {
-
-    static void writeJsonByAnotherJGsonToFile() {
-        String json = AnotherJGson.toJson(getPerson());
-        File file = new File(AnotherJGson.class.getClassLoader().getResource("person.json").getPath());
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     static Person getPerson() {
         String[] cards = new String[]{"1", "2", "3"};
@@ -34,18 +23,4 @@ public class TestHelper {
         Person personParent = new Person("personParent name", "personParent surname", false, 33, cards, books, phones, 1985, personParentParent, personChildChild);
         return new Person("Ivan", "Ivanov", true, 33, cards, books, phones, 1900, personParent, personChild);
     }
-
-
-    static Person getPersonFromFileByGson() {
-        Gson gson = new Gson();
-        InputStream is = AnotherJGsonTest.class.getClassLoader().getResourceAsStream("person.json");
-        Person person = null;
-        try (JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(is)))) {
-            person = gson.fromJson(reader, Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return person;
-    }
-
 }
