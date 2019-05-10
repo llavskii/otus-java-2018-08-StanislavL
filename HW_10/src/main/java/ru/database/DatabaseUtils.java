@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.sql.*;
 
-public class DatabaseService {
+public class DatabaseUtils {
 
     public static void executeUpdate(Connection connection, String sqlScript) throws SQLException {
         try (final Statement statement = connection.createStatement()) {
@@ -13,20 +13,26 @@ public class DatabaseService {
         }
     }
 
-    public static ResultSet query(Connection connection, String query) throws SQLException {
-        Statement statement = connection.createStatement();
-        System.out.println("SQL sqript: " + query);
-        return statement.executeQuery(query);
+    public static void executePrepUpdate(PreparedStatement statement) throws SQLException {
+        System.out.println("SQL update sqript: " + getQueryFromPrepareStatement(statement));
+        statement.executeUpdate();
     }
 
+    public static ResultSet executePrepQuery(PreparedStatement statement) throws SQLException {
+        System.out.println("SQL select sqript: " + getQueryFromPrepareStatement(statement));
+        return statement.executeQuery();
+    }
+
+    private static String getQueryFromPrepareStatement(PreparedStatement statement) {
+        String s = statement.toString();
+        return s.substring(s.lastIndexOf("PreparedStatement: "));
+    }
 
     public static boolean isTableExistInDbByName(Connection connection, String tableName) throws SQLException {
-        Statement statement = null;
-        ResultSet result = null;
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             String query = "SELECT 1 FROM  " + tableName;
-            result = statement.executeQuery(query);
+            statement.executeQuery(query);
         } catch (SQLException e) {
             return false;
         }

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static ru.database.DatabaseService.executeUpdate;
-import static ru.database.DatabaseService.getConnectionToSqlServer;
+import static ru.database.DatabaseUtils.executeUpdate;
+import static ru.database.DatabaseUtils.getConnectionToSqlServer;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class DataSetDbTest {
@@ -33,16 +33,15 @@ public class DataSetDbTest {
         try {
             connection = getConnectionToSqlServer(new com.mysql.cj.jdbc.Driver(), DB_HOST_URL, DB_OPTIONS, USER, PASS);
             executeUpdate(connection, CREATE_DATABASE + DB_NAME);
-            connection = DatabaseService.getConnectionToDb(DB_HOST_URL, DB_NAME, DB_OPTIONS, USER, PASS);
+            connection = DatabaseUtils.getConnectionToDb(DB_HOST_URL, DB_NAME, DB_OPTIONS, USER, PASS);
             executeUpdate(connection, CREATE_TABLE_USER_DATASET);
         } catch (SQLException e) {
             Assertions.fail("SQL error detected: " + e.getMessage());
         }
-
     }
 
     @Test
-    void ExecutorDataSetDaoTest() {
+    void ExecutorDataSetDaoTest() throws SQLException, IllegalAccessException {
         ExecutorDataSetDao executorDataSetDao = new ExecutorDataSetDao(connection);
 
         DataSet userDataSet1 = new UserDataSet(1, "Jack", 35);
